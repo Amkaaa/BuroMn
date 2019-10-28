@@ -1,0 +1,148 @@
+Brandings = {isShowed:false};
+function showLicBranding(iTop, iLeft, iRight, tHeight, bgColor, link, fixed, zero, additional_images)
+{
+    if(!Brandings.isShowed) {
+
+        Brandings.isShowed=true;
+        ai = {topM: iTop, topS: iTop, leftS: '', leftM: '', rightS: '', rightM: '', clickL:link, clickR:link};
+
+        additional_images = additional_images || {};
+        additional_images = $.extend(ai, additional_images);
+
+        $('<link>', {rel: 'stylesheet', href: 'https://www.buro247.ru/branding/branding_new.css'}).appendTo('head');
+
+        var rand = Math.floor((Math.random() * 9 + 1) * 1000000000);
+        var html, htmlL, htmlR;
+
+        var iTopS = additional_images.topS;
+        var iTopM = additional_images.topM;
+
+        var iLeftS, iLeftM, iRightS, iRightM;
+        if (additional_images.leftS) iLeftS = additional_images.leftS;
+        if (additional_images.leftM) iLeftM = additional_images.leftM;
+
+        if (additional_images.rightS) iRightS = additional_images.rightS;
+        if (additional_images.rightM) iRightM = additional_images.rightM;
+        if (link) {
+            html = $('<a>', {
+                href: link,
+                target: '_blank',
+                text: '\u00A0' // &nbsp;
+            }).css({
+                display: 'block',
+                width: '100%',
+                height: '100%'
+            });
+            htmlL = $('<a>', {
+                href: additional_images.clickL,
+                target: '_blank',
+                text: '\u00A0' // &nbsp;
+            }).css({
+                display: 'block',
+                width: '100%',
+                height: '100%'
+            });
+            htmlR = $('<a>', {
+                href: additional_images.clickR,
+                target: '_blank',
+                text: '\u00A0' // &nbsp;
+            }).css({
+                display: 'block',
+                width: '100%',
+                height: '100%'
+            });
+
+
+        } else {
+            html = '<div>&nbsp</div>';
+            htmlL = '<div>&nbsp</div>';
+            htmlR = '<div>&nbsp</div>';
+        }
+
+        $('body').prepend($('<div>', {class: "branding-head"}));
+        var branding_container = $($('.main_content_container  .wrapper').get(0));
+        branding_container
+            .append($('<div>', {class: "branding-left"}))
+            .append($('<div>', {class: "branding-right"}));
+		
+
+		$('.branding-left, .branding-right').css('top',tHeight+"px");
+
+        $('.branding-head').html(html);
+        $('.branding-left').html(htmlL);
+        $('.branding-right').html(htmlR);
+
+        //$('body').css('background', bgColor);
+        $('.branding-head').height(tHeight).css('background', 'url("' + iTop + '") 50% 0 no-repeat')
+            .data('top', iTop)
+            .data('top-s', iTopS)
+            .data('top-m', iTopM);
+        $('.branding-left').css('background', 'url("' + iLeft + '") right 0 no-repeat ' + bgColor)
+            .data('left', iLeft)
+            .data('left-s', iLeftS)
+            .data('left-m', iLeftM);
+        $('.branding-right').css('background', 'url("' + iRight + '") 0 0 no-repeat ' + bgColor)
+            .data('right', iRight)
+            .data('right-s', iRightS)
+            .data('right-m', iRightM);
+
+
+        if (fixed) {
+            $('.branding-head').css('background-attachment', 'fixed');
+
+            var ot = branding_container.offset().top - 61
+
+
+            $(window).on('scroll', function () {
+                var scrolled = $(window).scrollTop();
+
+                if (scrolled >= ot) {
+                    if (!$('.branding-left, .branding-right').hasClass('branding_fixed')) {
+                        $('.branding-left, .branding-right').addClass('branding_fixed');
+                    }
+                } else {
+                    $('.branding-left, .branding-right').removeClass('branding_fixed');
+                    $('.branding-left, .branding-right').removeClass('branding_bottom');
+                }
+            }).triggerHandler('scroll');
+
+        } else {
+            $('.branding-left, .branding-right').css('position', 'absolute');
+        }
+
+        $(window).on('load resize', function () {
+            var w = $('body').width();
+            if (w > 1600) {
+                $('.branding-head').css('background-image', 'url(' + $('.branding-head').data('top') + ')');
+                $('.branding-left, .branding-right').removeClass('hidden');
+                $('.branding-left').css('background-image', 'url(' + $('.branding-left').data('left') + ')');
+                $('.branding-right').css('background-image', 'url(' + $('.branding-right').data('right') + ')');
+            } else if (w > 1200) {
+                $('.branding-head').css('background-image', 'url(' + $('.branding-head').data('top-m') + ')');
+                if ($('.branding-left').data('left-m')) {
+                    $('.branding-left').css('background-image', 'url(' + $('.branding-left').data('left-m') + ')');
+                    $('.branding-right').css('background-image', 'url(' + $('.branding-right').data('right-m') + ')');
+                } else {
+                    $('.branding-left, .branding-right').addClass('hidden');
+                }
+            } else {
+                $('.branding-head').css('background-image', 'url(' + $('.branding-head').data('top-s') + ')');
+                if ($('.branding-left').data('left-s')) {
+                    $('.branding-left').css('background-image', 'url(' + $('.branding-left').data('left-s') + ')');
+                    $('.branding-right').css('background-image', 'url(' + $('.branding-right').data('right-s') + ')');
+                } else {
+                    $('.branding-left, .branding-right').addClass('hidden');
+                }
+            }
+        }).triggerHandler('load');
+
+        if (zero.length > 0) {
+            var rand = Math.floor((Math.random() * 9 + 1) * 1000000000);
+            for (i in zero) {
+                if (zero[i]) {
+                    (new Image()).src = zero[i] + rand;
+                }
+            }
+        }
+    }
+};
