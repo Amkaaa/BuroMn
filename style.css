@@ -4,6 +4,23 @@ body{
 	margin: 0;
 	padding: 0;
 }
+/*.news{
+	display: grid;
+	grid-gap: 20px;
+	width: 100%;
+	height: 100%;
+	grid-template-columns: 70% 30%;
+	grid-template-rows: 500px 270px;
+}*/
+a.nav-link{
+	font-size: 12px;
+}
+#navbarNav{
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-content: flex-end;
+}
 section{
 	position: relative;
 	width: 100%;
